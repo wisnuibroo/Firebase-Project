@@ -4,7 +4,7 @@ import 'package:firebase_project/views/loginpage.dart';
 import 'package:get/get.dart';
 
 class MyappRoute {
-  static const loginpage = '/';
+  static const loginpage = '/login';
   static const homepage = '/home';
 
   static final page = [

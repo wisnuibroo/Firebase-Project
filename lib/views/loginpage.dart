@@ -8,8 +8,9 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Inisialisasi controller
+   
     final controller = Get.put(LoginController());
+
 
     return FlutterLogin(
       headerWidget: Column(

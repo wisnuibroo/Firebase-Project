@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_project/widgets/my_text.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -9,35 +11,46 @@ class HomePage extends StatelessWidget {
     final User? user = FirebaseAuth.instance.currentUser;
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          "Welcome HomePage",
+        title: MyText(
+          text: 'Welcome!',
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          color: Colors.black,
         ),
       ),
       drawer: Drawer(
         child: Column(
           children: [
-            UserAccountsDrawerHeader(accountName: Text(
-              user?.displayName ?? 'Guest',
+            UserAccountsDrawerHeader(
+              accountName: Text(
+                user?.displayName ?? 'Guest',
+              ),
+              accountEmail: Text(
+                user?.email ?? 'Guest',
+              ),
+              currentAccountPicture: CircleAvatar(
+                  backgroundImage: NetworkImage(
+                user?.photoURL ?? "",
+              )),
             ),
-             accountEmail: Text(
-              user?.email ?? 'Guest',
-             ),
-             currentAccountPicture: CircleAvatar(
-              backgroundImage: NetworkImage(user?.photoURL ?? "",
-             )
-             ),
-             ),
             ListTile(
-              title: Text("profile"),
+              title: MyText(
+                  text: "Profile",
+                  fontSize: 15,
+                  fontWeight: FontWeight.normal,
+                  color: Colors.black),
               onTap: () {},
             ),
             ListTile(
-              title: Text("setting"),
-              onTap: () {},
-            ),
-            ListTile(
-              title: Text("log out"),
-              onTap: () {},
+              title: MyText(
+                text: 'Log Out',
+                fontSize: 15,
+                fontWeight: FontWeight.normal,
+                color: Colors.black,
+              ),
+              onTap: () {
+                Get.toNamed("/login");
+              },
             ),
           ],
         ),
