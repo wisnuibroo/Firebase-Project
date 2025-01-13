@@ -23,8 +23,8 @@ class MyApp extends StatelessWidget {
 
 
       debugShowCheckedModeBanner: false,
-      initialRoute: AppRoute.loginpage,
-      getPages: AppRoute.route,
+      initialRoute: MyappRoute.loginpage,
+      getPages: MyappRoute.page,
     );
   }
 }

@@ -30,7 +30,7 @@ class LoginPage extends StatelessWidget {
         await controller.handleSignUp(val);
       },
       logo: const AssetImage("assets/google.png"),
-      title: "Flutter Login",
+      title: "Absensi 11 PPLG 2",
       initialAuthMode: AuthMode.signup,
       userType: LoginUserType.email,
       onLogin: (val) async {
