@@ -3,14 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:get/get.dart';
 
-
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     // Inisialisasi controller
-    final loginController = Get.put(LoginController());
+    final controller = Get.put(LoginController());
 
     return FlutterLogin(
       headerWidget: Column(
@@ -18,21 +17,28 @@ class LoginPage extends StatelessWidget {
         children: [
           InkWell(
             onTap: () async {
-              await loginController.signInWithGoogle();
+              await controller.signInWithGoogle();
             },
             child: Center(
-              child: Text("Google Sign In"),
-            ),
+                child: Image.network(
+                    width: 30,
+                    "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/768px-Google_%22G%22_logo.svg.png")),
           ),
         ],
       ),
-      onSignup: (val) {},
+      onSignup: (val) async {
+        await controller.handleSignUp(val);
+      },
       logo: const AssetImage("assets/google.png"),
       title: "Flutter Login",
       initialAuthMode: AuthMode.signup,
       userType: LoginUserType.email,
-      onLogin: (val) async {},
-      onRecoverPassword: (val) async {},
+      onLogin: (val) async {
+        await controller.handleLogin(val);
+      },
+      onRecoverPassword: (val) async {
+        await controller.handlePasswordRecovery(val);
+      },
       theme: LoginTheme(
         titleStyle: TextStyle(
           color: Colors.white,
