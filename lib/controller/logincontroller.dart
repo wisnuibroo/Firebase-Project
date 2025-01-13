@@ -1,0 +1,58 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+
+class LoginController extends GetxController {
+  FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  GoogleSignIn googleSignIn = GoogleSignIn();
+
+  Future<User?> signInWithGoogle() async {
+    try {
+      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+      if (googleUser == null) {
+        Get.snackbar(
+          "Sign in Cancelled",
+          "You canceled the Google sign-in",
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+        return null;
+      }
+
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      UserCredential userCredential =
+          await firebaseAuth.signInWithCredential(credential);
+      User? user = userCredential.user;
+
+      if (user != null) {
+        Get.snackbar(
+          "Sign in Successfully",
+          "Welcome ${user.displayName ?? 'user'}!",
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+        );
+        Get.offNamed('/home');
+      }
+      return user;
+    } catch (e) {
+      Get.snackbar(
+        "Login Failed",
+        e.toString(),
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+      print("login error: $e");
+      return null;
+
+      
+    }
+  }
+}
