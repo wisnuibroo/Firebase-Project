@@ -96,20 +96,17 @@ class LoginController extends GetxController {
   Future<void> handlePasswordRecovery(String email) async {
     try {
       await firebaseAuth.sendPasswordResetEmail(email: email);
-      
 
-        Get.snackbar("Password Recovery", "Password Reset email sent to $email!");      
+      Get.snackbar("Password Recovery", "Password Reset email sent to $email!");
     } catch (e) {
       Get.snackbar("Password Recovery Failed", e.toString());
     }
   }
 
-
   // SIGN IN  Anonymous
   Future<void> signInAnonymously() async {
     try {
-      UserCredential userCredential =
-          await firebaseAuth.signInAnonymously();
+      UserCredential userCredential = await firebaseAuth.signInAnonymously();
       User? user = userCredential.user;
 
       if (user != null) {
