@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_project/api/firestore.dart';
+import 'package:firebase_project/views/profilepage.dart';
 import 'package:firebase_project/widgets/my_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -197,7 +198,13 @@ class _HomePageState extends State<HomePage> {
               color: Colors.black,
             ),
             leading: const Icon(Icons.person),
-            onTap: () {},
+            onTap: () {
+              Get.to(
+                () => ProfilePage(),
+                transition: Transition.fadeIn,
+                duration: const Duration(milliseconds: 350),
+              );
+            },
           ),
           ListTile(
             title: MyText(
