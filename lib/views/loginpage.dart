@@ -1,4 +1,5 @@
 import 'package:firebase_project/controller/logincontroller.dart';
+import 'package:firebase_project/widgets/my_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:get/get.dart';
@@ -8,25 +9,9 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-   
     final controller = Get.put(LoginController());
 
-
     return FlutterLogin(
-      headerWidget: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          InkWell(
-            onTap: () async {
-              await controller.signInWithGoogle();
-            },
-            child: Center(
-                child: Image.network(
-                    width: 30,
-                    "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/768px-Google_%22G%22_logo.svg.png")),
-          ),
-        ],
-      ),
       onSignup: (val) async {
         await controller.handleSignUp(val);
       },
@@ -40,6 +25,27 @@ class LoginPage extends StatelessWidget {
       onRecoverPassword: (val) async {
         await controller.handlePasswordRecovery(val);
       },
+      headerWidget: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          MyText(
+              text: "or sign in with: ",
+              fontSize: 15,
+              fontWeight: FontWeight.normal,
+              color: Colors.black54),
+          SizedBox(height: 10),
+          InkWell(
+            onTap: () async {
+              await controller.signInWithGoogle();
+            },
+            child: Center(
+                child: Image.network(
+                    width: 25,
+                    "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/768px-Google_%22G%22_logo.svg.png")),
+          ),
+          SizedBox(height: 10)
+        ],
+      ),
       theme: LoginTheme(
         titleStyle: TextStyle(
           color: Colors.white,
