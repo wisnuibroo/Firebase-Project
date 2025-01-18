@@ -15,7 +15,7 @@ class LoginPage extends StatelessWidget {
       onSignup: (val) async {
         await controller.handleSignUp(val);
       },
-      logo: const AssetImage("assets/google.png"),
+      logo: const AssetImage("assets/murid.png"),
       title: "Absensi 11 PPLG 2",
       initialAuthMode: AuthMode.signup,
       userType: LoginUserType.email,
