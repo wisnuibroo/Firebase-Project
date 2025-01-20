@@ -1,5 +1,4 @@
 import 'package:firebase_project/controller/logincontroller.dart';
-import 'package:firebase_project/widgets/my_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:get/get.dart';
@@ -28,26 +27,36 @@ class LoginPage extends StatelessWidget {
       headerWidget: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          MyText(
-              text: "or sign in with: ",
-              fontSize: 15,
-              fontWeight: FontWeight.normal,
-              color: Colors.black54),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           InkWell(
             onTap: () async {
               await controller.signInWithGoogle();
             },
             child: Center(
-                child: Image.network(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Image.network(
+                    "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/768px-Google_%22G%22_logo.svg.png",
                     width: 25,
-                    "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/768px-Google_%22G%22_logo.svg.png")),
+                  ),
+                  const SizedBox(width: 10),
+                  const Text(
+                    "Sign in with Google",
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.black54,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
-          SizedBox(height: 10)
+          const SizedBox(height: 10),
         ],
       ),
       theme: LoginTheme(
-        titleStyle: TextStyle(
+        titleStyle: const TextStyle(
           color: Colors.white,
           fontSize: 24,
           fontWeight: FontWeight.bold,
