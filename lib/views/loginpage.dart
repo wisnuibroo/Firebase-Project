@@ -28,7 +28,7 @@ class LoginPage extends StatelessWidget {
       headerWidget: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const SizedBox(height: 10),
+          SizedBox(height: 10),
           InkWell(
             onTap: () async {
               await controller.signInWithGoogle();
@@ -41,24 +41,22 @@ class LoginPage extends StatelessWidget {
                     "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/768px-Google_%22G%22_logo.svg.png",
                     width: 25,
                   ),
-                  const SizedBox(width: 10),
-                  const MyText(
-                    text: 
-                    "Sign in with Google",
-                   
-                      fontSize: 14,
-                      color: Colors.black54, fontWeight: FontWeight.bold,
-                    
+                  SizedBox(width: 10),
+                  MyText(
+                    text: "Sign in with Google",
+                    fontSize: 14,
+                    color: Colors.black54,
+                    fontWeight: FontWeight.bold,
                   ),
                 ],
               ),
             ),
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: 10),
         ],
       ),
       theme: LoginTheme(
-        titleStyle: const TextStyle(
+        titleStyle: TextStyle(
           color: Colors.white,
           fontSize: 24,
           fontWeight: FontWeight.bold,
