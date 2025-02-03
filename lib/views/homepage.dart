@@ -1,11 +1,14 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-
-import 'package:firebase_project/controller/homecontroller.dart';
-import 'package:firebase_project/views/profilepage.dart';
-import 'package:firebase_project/widgets/my_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+import '../controller/homecontroller.dart';
+import '../views/profilepage.dart';
+import '../widgets/my_text.dart';
+import '../widgets/my_text_field.dart';
+import '../widgets/my_button.dart';
+import '../widgets/my_card.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -32,61 +35,37 @@ class _HomePageState extends State<HomePage> {
           fontWeight: FontWeight.bold,
           color: Colors.black,
         ),
-        content: TextField(
+        content: MyTextField(
           controller: textController,
-          decoration: InputDecoration(
-            hintText: 'Siapa namamu...',
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-          ),
+          hintText: 'Siapa namamu...',
         ),
         actions: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              ElevatedButton(
+              MyButton(
+                text: "Cancel",
                 onPressed: () {
                   textController.clear();
                   Navigator.pop(context);
                 },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                child: MyText(
-                    text: "Cancel",
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white),
+                color: Colors.red,
               ),
-              ElevatedButton(
+              MyButton(
+                text: "Save",
                 onPressed: () {
                   if (docID == null) {
                     firestoreService.addNote(textController.text);
                   } else {
                     firestoreService.UpdateNote(docID, textController.text);
                   }
-
                   textController.clear();
                   setState(() {
                     isFirstVisit = false;
                   });
                   Navigator.pop(context);
                 },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                child: MyText(
-                    text: "Save",
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white),
+                color: Colors.green,
               ),
             ],
           )
@@ -98,6 +77,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final User? user = FirebaseAuth.instance.currentUser;
+
     return Scaffold(
       appBar: AppBar(
         title: MyText(
@@ -108,10 +88,46 @@ class _HomePageState extends State<HomePage> {
         ),
         backgroundColor: Colors.white,
       ),
-      drawer: _buildDrawer(user),
+      drawer: Drawer(
+        child: Column(
+          children: [
+            UserAccountsDrawerHeader(
+              accountName: Text(user?.displayName ?? 'Guest'),
+              accountEmail: Text(user?.email ?? 'Guest'),
+              currentAccountPicture: CircleAvatar(
+                backgroundImage: NetworkImage(user?.photoURL ?? ''),
+              ),
+            ),
+            ListTile(
+              title: MyText(
+                text: "Profile",
+                fontSize: 15,
+                fontWeight: FontWeight.normal,
+                color: Colors.black,
+              ),
+              leading: const Icon(Icons.person),
+              onTap: () {
+                Get.toNamed("/profile");
+              },
+            ),
+            ListTile(
+              title: MyText(
+                text: 'Log Out',
+                fontSize: 15,
+                fontWeight: FontWeight.normal,
+                color: Colors.black,
+              ),
+              leading: const Icon(Icons.logout),
+              onTap: () {
+                Get.toNamed("/login");
+              },
+            ),
+          ],
+        ),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: openNoteBox,
-        backgroundColor: Color(0xFF7F70DF),
+        backgroundColor: const Color(0xFF7F70DF),
         child: const Icon(Icons.add, color: Colors.white),
       ),
       body: Padding(
@@ -121,10 +137,9 @@ class _HomePageState extends State<HomePage> {
           children: [
             if (isFirstVisit)
               Container(
-                padding: const EdgeInsets.symmetric(
-                    vertical: 10.0, horizontal: 15.0),
+                padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
                 decoration: BoxDecoration(
-                  color: Color(0xFFB3A7FF),
+                  color: const Color(0xFFB3A7FF),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Row(
@@ -163,91 +178,25 @@ class _HomePageState extends State<HomePage> {
                             document.data() as Map<String, dynamic>;
                         String noteText = data['note'];
 
-                        return _buildNoteCard(noteText, docID);
+                        return MyCard(
+                          text: noteText,
+                          onEdit: () => openNoteBox(docID: docID),
+                          onDelete: () => firestoreService.deleteNote(docID),
+                        );
                       },
                     );
                   } else {
                     return const Center(
-                      child: Text("No notes yet. Start adding some!"),
+                      child:  MyText(
+                        text: 'Tidak ada daftar absensin',
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
                     );
                   }
                 },
               ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildDrawer(User? user) {
-    return Drawer(
-      child: Column(
-        children: [
-          UserAccountsDrawerHeader(
-            accountName: Text(user?.displayName ?? 'Guest'),
-            accountEmail: Text(user?.email ?? 'Guest'),
-            currentAccountPicture: CircleAvatar(
-              backgroundImage: NetworkImage(user?.photoURL ?? ''),
-            ),
-          ),
-          ListTile(
-            title: MyText(
-              text: "Profile",
-              fontSize: 15,
-              fontWeight: FontWeight.normal,
-              color: Colors.black,
-            ),
-            leading: const Icon(Icons.person),
-            onTap: () {
-              Get.to(
-                () => ProfilePage(),
-                transition: Transition.fadeIn,
-                duration: const Duration(milliseconds: 350),
-              );
-            },
-          ),
-          ListTile(
-            title: MyText(
-              text: 'Log Out',
-              fontSize: 15,
-              fontWeight: FontWeight.normal,
-              color: Colors.black,
-            ),
-            leading: const Icon(Icons.logout),
-            onTap: () {
-              Get.toNamed("/login");
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildNoteCard(String noteText, String docID) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15),
-      ),
-      elevation: 5,
-      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
-      child: ListTile(
-        title: MyText(
-          text: noteText,
-          fontSize: 16,
-          fontWeight: FontWeight.w500,
-          color: Colors.black,
-        ),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            IconButton(
-              onPressed: () => openNoteBox(docID: docID),
-              icon: const Icon(Icons.edit, color: Color(0xFF7F70DF)),
-            ),
-            IconButton(
-              onPressed: () => firestoreService.deleteNote(docID),
-              icon: const Icon(Icons.delete, color: Colors.red),
             ),
           ],
         ),

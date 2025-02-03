@@ -1,4 +1,5 @@
 import 'package:firebase_project/controller/logincontroller.dart';
+import 'package:firebase_project/widgets/my_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:get/get.dart';
@@ -41,12 +42,13 @@ class LoginPage extends StatelessWidget {
                     width: 25,
                   ),
                   const SizedBox(width: 10),
-                  const Text(
+                  const MyText(
+                    text: 
                     "Sign in with Google",
-                    style: TextStyle(
+                   
                       fontSize: 14,
-                      color: Colors.black54,
-                    ),
+                      color: Colors.black54, fontWeight: FontWeight.bold,
+                    
                   ),
                 ],
               ),

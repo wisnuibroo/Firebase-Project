@@ -1,4 +1,4 @@
-import 'package:firebase_project/bindings/AllBinding.dart';
+import 'package:firebase_project/bindings/AppBinding.dart';
 import 'package:firebase_project/views/homepage.dart';
 import 'package:firebase_project/views/loginpage.dart';
 import 'package:firebase_project/views/profilepage.dart';

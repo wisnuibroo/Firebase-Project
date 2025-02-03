@@ -23,11 +23,7 @@ class ProfilePage extends StatelessWidget {
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
-            Get.to(
-              () => HomePage(),
-              transition: Transition.fadeIn,
-              duration: const Duration(milliseconds: 350),
-            );
+           Get.toNamed("/home");
           },
         ),
       ),
@@ -61,7 +57,7 @@ class ProfilePage extends StatelessWidget {
             ElevatedButton.icon(
               onPressed: () async {
                 await FirebaseAuth.instance.signOut();
-                Get.offAllNamed("/login");
+                Get.toNamed("/login");
               },
               icon: Icon(Icons.logout, color: Colors.white),
               label: MyText(
