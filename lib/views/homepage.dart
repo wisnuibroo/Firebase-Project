@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_project/api/firestore.dart';
+
+import 'package:firebase_project/controller/homecontroller.dart';
 import 'package:firebase_project/views/profilepage.dart';
 import 'package:firebase_project/widgets/my_text.dart';
 import 'package:flutter/material.dart';
