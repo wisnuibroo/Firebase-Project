@@ -21,6 +21,6 @@ class MyappRoute {
     GetPage(
         name: MyappRoute.profilepage,
         page: () => ProfilePage(),
-        binding: AllBindings()),
+        ),
   ];
 }

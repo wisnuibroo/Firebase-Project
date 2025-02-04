@@ -2,30 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_project/controller/crudcontroller.dart';
+import 'package:firebase_project/widgets/my_text.dart';
+import 'package:firebase_project/widgets/my_text_field.dart';
+import 'package:firebase_project/widgets/my_button.dart';
+import 'package:firebase_project/widgets/my_card.dart';
 
-import '../controller/homecontroller.dart';
-import '../views/profilepage.dart';
-import '../widgets/my_text.dart';
-import '../widgets/my_text_field.dart';
-import '../widgets/my_button.dart';
-import '../widgets/my_card.dart';
+class HomePage extends StatelessWidget {
+  HomePage({super.key});
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
-
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  final FirestoreService firestoreService = FirestoreService();
-  final TextEditingController textController = TextEditingController();
-  bool isFirstVisit = true;
+  final CRUDcontroller crudController = Get.find<CRUDcontroller>();
 
   void openNoteBox({String? docID}) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
+    final TextEditingController textController = TextEditingController();
+
+    Get.dialog(
+      AlertDialog(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
         ),
@@ -47,7 +39,7 @@ class _HomePageState extends State<HomePage> {
                 text: "Cancel",
                 onPressed: () {
                   textController.clear();
-                  Navigator.pop(context);
+                  Get.back();
                 },
                 color: Colors.red,
               ),
@@ -55,15 +47,12 @@ class _HomePageState extends State<HomePage> {
                 text: "Save",
                 onPressed: () {
                   if (docID == null) {
-                    firestoreService.addNote(textController.text);
+                    crudController.addNote(textController.text);
                   } else {
-                    firestoreService.UpdateNote(docID, textController.text);
+                    crudController.updateNote(docID, textController.text);
                   }
                   textController.clear();
-                  setState(() {
-                    isFirstVisit = false;
-                  });
-                  Navigator.pop(context);
+                  Get.back();
                 },
                 color: Colors.green,
               ),
@@ -135,40 +124,45 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (isFirstVisit)
-              Container(
-                padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFB3A7FF),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Row(
-                  children: [
-                    Image.network(
-                      'https://img.pikbest.com/element_our/20220729/bg/5a04f92464359.png!w700wp',
-                      width: 50,
-                      height: 50,
-                      fit: BoxFit.cover,
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: MyText(
-                        text: 'Absen dulu dong!',
-                        fontSize: 17,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
+            StreamBuilder<QuerySnapshot>(
+              stream: crudController.getNotesStream(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  List notesList = snapshot.data!.docs;
+
+                  // Jika tidak ada data, melihatkan pesan "Absen dulu dong!"
+                  if (notesList.isEmpty) {
+                    return Container(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 10.0, horizontal: 15.0),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFB3A7FF),
+                        borderRadius: BorderRadius.circular(10),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-            Expanded(
-              child: StreamBuilder<QuerySnapshot>(
-                stream: firestoreService.getNotesStream(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    List notesList = snapshot.data!.docs;
-                    return ListView.builder(
+                      child: Row(
+                        children: [
+                          Image.network(
+                            'https://img.pikbest.com/element_our/20220729/bg/5a04f92464359.png!w700wp',
+                            width: 50,
+                            height: 50,
+                            fit: BoxFit.cover,
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: MyText(
+                              text: 'Absen dulu dong!',
+                              fontSize: 17,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+
+                  return Expanded(
+                    child: ListView.builder(
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       itemCount: notesList.length,
                       itemBuilder: (context, index) {
@@ -181,22 +175,17 @@ class _HomePageState extends State<HomePage> {
                         return MyCard(
                           text: noteText,
                           onEdit: () => openNoteBox(docID: docID),
-                          onDelete: () => firestoreService.deleteNote(docID),
+                          onDelete: () => crudController.deleteNote(docID, context),
                         );
                       },
-                    );
-                  } else {
-                    return const Center(
-                      child:  MyText(
-                        text: 'Tidak ada daftar absensin',
-                        fontSize: 17,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    );
-                  }
-                },
-              ),
+                    ),
+                  );
+                } else {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+              },
             ),
           ],
         ),

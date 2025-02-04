@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_project/views/homepage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_project/widgets/my_text.dart';
 import 'package:get/get.dart';
@@ -36,7 +35,7 @@ class ProfilePage extends StatelessWidget {
               radius: 50,
               backgroundImage: NetworkImage(
                 user?.photoURL ??
-                    "https://www.pngall.com/wp-content/uploads/5/User-Profile-PNG.png", // Gambar default jika user tidak punya foto
+                    "https://www.pngall.com/wp-content/uploads/5/User-Profile-PNG.png", 
               ),
             ),
             SizedBox(height: 20),
