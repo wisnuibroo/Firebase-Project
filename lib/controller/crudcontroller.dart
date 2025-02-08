@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+// CRUD Controller
 class CRUDcontroller extends GetxController {
   final CollectionReference notes = 
       FirebaseFirestore.instance.collection('notes');

@@ -11,14 +11,17 @@ class MyappRoute {
   static const profilepage = '/profile';
 
   static final page = [
+    // Definitaion Route login
     GetPage(
         name: MyappRoute.loginpage,
         page: () => LoginPage(),
         binding: Loginbinding()),
+    // Definitaion Route Home    
     GetPage(
         name: MyappRoute.homepage,
         page: () => HomePage(),
         binding: Homebinding()),
+    // Definitaion Route Profile
     GetPage(
         name: MyappRoute.profilepage,
         page: () => ProfilePage(),
